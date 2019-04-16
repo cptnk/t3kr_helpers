@@ -13,9 +13,20 @@
             "email": "sg@kreativrudel.de"
         }
     ],
+    "keywords": [
+        "TYPO3",
+        "typo3",
+        "helper"
+    ],
     "autoload": {
         "psr-4": {
             "Kreativrudel\\Helpers\\": "Classes/"
+        }
+    },
+    "extra": {
+        "typo3/cms": {
+            "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "web-dir": ".Build/Web"
         }
     }
 }
