@@ -30,4 +30,13 @@ class AjaxHelper {
         $jsonView->setVariablesToRender($variablesToRender);
         return $jsonView->render();
     }
+
+    /**
+     * @param int $maxCount
+     * @param int $limit
+     * @return int
+     */
+    public function calculateMaxPageSize($maxCount, $limit) {
+        return round($maxCount / $limit, 0, PHP_ROUND_HALF_UP);
+    }
 }
