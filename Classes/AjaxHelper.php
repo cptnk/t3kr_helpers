@@ -37,6 +37,6 @@ class AjaxHelper {
      * @return int
      */
     public function calculateMaxPageSize($maxCount, $limit) {
-        return round($maxCount / $limit, 0, PHP_ROUND_HALF_UP);
+        return ceil($maxCount / $limit);
     }
 }
