@@ -62,11 +62,8 @@ class CoreHelper {
     /**
      * Temporary creates a Thumbnail for a given file id or filename and sizes
      *
-     * @todo: Couldnt get the inner dependency injection to work outside the controller context, so its getting injected trough parameters for now
-     *
-     *
-     * @param ImageService $imageService
      * @param array $sizes
+     * @param int $uid
      * @param string $fileName
      *
      * @throws Exception
@@ -82,5 +79,15 @@ class CoreHelper {
         $processingInstructions = $sizes;
         $processedImage = $imageService->applyProcessingInstructions($image, $processingInstructions);
         return $imageService->getImageUri($processedImage);
+    }
+
+    /**
+     * Transforms a flexform multi select to an array
+     *
+     * @param string $selectValues
+     * @return array
+     */
+    public function flexFormMultiSelectToArray(string $selectValues) {
+        return explode(',', $selectValues);
     }
 }
