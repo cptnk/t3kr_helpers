@@ -48,15 +48,26 @@ class CoreHelper {
      * @param string $plugin
      * @return array
      */
-    public function exposePluginSettings(string $extName, string $plugin): array {
+    public function exposePluginSettings(string $extName, string $plugin, string $configurationType = 'settings'): array {
         $configurationManager = GeneralUtility::makeInstance(
             ConfigurationManager::class
         );
-        return $configurationManager->getConfiguration(
-            \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-            $extName,
-            $plugin
-        );
+        if ($configurationType === 'settings') {
+            return $configurationManager->getConfiguration(
+                \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+                $extName,
+                $plugin
+            );
+        }
+        // This is needed if were outside the controller context like when hooks trigger from the typo3 backend where
+        // performance just doesnt matter
+        if ($configurationType === 'full') {
+            return $configurationManager->getConfiguration(
+                \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT,
+                $extName,
+                $plugin)
+            ['plugin.']['tx_' . $extName . '.']['settings.'];
+        }
     }
 
     /**
@@ -74,8 +85,7 @@ class CoreHelper {
         if (empty($fileName)) {
             throw new Exception('Please provide a valid $fileName');
         }
-
-        $image = $imageService->getImage($fileName, null, false);
+        $image = $imageService->getImage($_SERVER['DOCUMENT_ROOT'] . '/fileadmin/' . $fileName, null, false);
         $processingInstructions = $sizes;
         $processedImage = $imageService->applyProcessingInstructions($image, $processingInstructions);
         return $imageService->getImageUri($processedImage);
